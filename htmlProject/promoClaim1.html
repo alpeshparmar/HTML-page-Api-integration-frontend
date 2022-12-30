@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="_token" content="{{ csrf_token() }}">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="./Home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .loading {
+            position: fixed;
+            margin: auto;
+            width: 100%;
+            height: 100%;
+            background: #cdcdcd;
+            /* animation: backGround 5s ease infinite, */
+        }
+
+        .loadingWrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #loading {
+            margin: auto;
+            height: 100px;
+            width: 100px;
+            border: transparent;
+            border-top: 3px solid #ffcb23;
+            border-radius: 50%;
+            animation: round 2s linear infinite;
+        }
+
+        h1 {
+            color: #555555;
+            position: relative;
+            margin: auto;
+            top: 50%;
+        }
+        .promobtn::after{
+           display: none !important;
+        }
+        .card-body-contain{
+            text-align: end;
+        }
+        .card-body-contain button{
+            background: none;
+            color: #8b8686;
+        }
+        .card-body-contain .dropup{
+            display: block;
+        }
+        .card-title{
+            font-size: 17px;
+        }
+        .promo_contain_btn{
+            padding: 8px 25px;
+             background: #2a2a2a; 
+             font-size: 18px; 
+             border: 1px solid #ccc; 
+             border-radius: 30px;
+              margin-right: 10px; 
+              color: #fff;
+        }
+        .promo_img{
+            margin-right: 15px;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        .promo_img img{
+            width: 100%;
+            height: 100%;
+            border-radius: 15px; 
+        }
+        .promo_img_price{
+            z-index: 9;
+            position: absolute;
+            top: 9px;
+            left: 5px;
+            padding: 1px 8px;
+            background: #fff;
+            border: 2px solid #ccc;
+            border-radius: 20px;
+            font-size: 14px;
+
+        }
+        @media(max-width:576px){
+            .promo_img{
+                width: 50px !important;
+                height: 50px !important;
+            }
+            .promo_contain_btn{
+                padding: 8px 10px;
+                font-size: 15px; 
+            }
+        }
+
+        @keyframes round {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes backGround {
+
+            0% {
+                background-color: #222222;
+            }
+
+            50% {
+                background-color: #555555;
+            }
+
+            75% {
+                background-color: #444444;
+            }
+
+            100% {
+                background-color: #111111;
+            }
+
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="loading" style="display: none;">
+        <div class="loadingWrapper">
+            <div id="loading"> </div>
+            <h1>Loading . . .</h1>
+        </div>
+    </div>
+    <div class="px-2 pt-3">
+        <h1>Free Promotion Claim </h1>
+        <br>
+        <!-- <button class="btn btn-primary" type="button">
+            <a href='shop1.html' class="text-white">Shop Page </a>
+        </button> -->
+        <!-- <button class="btn btn-primary" type="button" onclick="logOut()">Logout</button> -->
+        <hr>
+        <div class="promo_claimsection">
+            <button class="btn available_btn" type="button" onclick="claim(1)" value="1">Available</button>
+            <button class="btn claims_btn" type="button" onclick="claim(0)" value="0">Claims</button>
+
+        </div>
+        <br>
+        <div id="main_div">
+        </div>
+        <div class="main_footersection">
+            <div class="footer_media d-flex">
+                <div class="media_home text-center">
+                    <i class="fa-solid fa-house-chimney" onclick="logOut()"></i>
+                    <h3>Home</h3>
+                    <!-- <button class="btn btn-primary" type="button" onclick="logOut()">Home</button> -->
+                </div>
+                <div class="media_home text-center">
+                    <a href='shop1.html' class="text-white"><i class="fa-solid fa-shop"></i></a> 
+                    <h3>Shop</h3> 
+                </div>
+                <div class="media_home text-center">
+                    <i class="fa-solid fa-qrcode"></i>
+                </div>
+                <div class="media_home text-center">
+                    <i class="fa-solid fa-gift"></i>
+                    <h3>Redeem</h3>
+                </div>
+                <div class="media_home text-center">
+                    <i class="fa-solid fa-share-nodes"></i>
+                    <h3>Refrral</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) {
+            // let main_url = window.location.origin;
+            window.location.href = "welcome1.html";
+        }
+        function logOut() {
+            if (token) {
+                localStorage.removeItem('token');
+                window.location.href = "welcome1.html";
+            }
+        }
+        $(document).ready(function () {
+            console.log('q');
+            claim(1)
+
+        });
+        function dropDown(){
+                if($('#drop_down_menu').hasClass('d-block')){
+                    $('#drop_down_menu').removeClass('d-block');
+                } else {
+                    $('#drop_down_menu').addClass('d-block');
+                }
+        }
+        function Toggle(data) {
+
+            var id = $(data).attr('data-id');
+            var follow = $(data).attr('data-follow');
+            let main_url = window.location.origin;
+            let url = "https://984b-103-251-16-235.in.ngrok.io/api/change/follow";
+            let token = localStorage.getItem('token');
+            $.ajax({
+                type: "POST",
+                url: "https://984b-103-251-16-235.in.ngrok.io/api/change/follow",
+                headers: {
+                    "Authorization": localStorage.getItem('token'),
+                    'ngrok-skip-browser-warning': true,
+                },
+                data: {
+                    follow,
+                    id
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    localStorage.setItem('token',response.token);
+                    claim(0)
+                }
+            });
+        }
+        function claim(type) {
+            $('#main_div').html('');
+
+            var id = $(".id").val();
+            let main_url = window.location.origin;
+            let url = "https://984b-103-251-16-235.in.ngrok.io/api/claims/"+type;
+            let token = localStorage.getItem('token');
+            $.ajax({
+                type: "POST",
+                url: "https://984b-103-251-16-235.in.ngrok.io/api/claims/",
+                headers: {
+                    "Authorization": localStorage.getItem('token')
+                },
+                data: {
+                    type: type
+                },
+                beforeSend: function () {
+                    $('.loading').css('display', 'block');
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    $('.loading').css('display', 'none');
+
+                    console.log(response);
+                    var html = '';
+                    $.each(response.claim, function (inx, value) {
+                        html += `<div class="card mb-2" style="display: flex;flex-direction: inherit;padding: 15px; align-items: flex-start;">`;
+                        html += `<div class="promo_img_price">1x</div>`;
+                        html += `<div class="promo_img">`;
+                        html += `<img src="default-image.jpg" alt="${value.image}">`;
+                        html += `    </div> `;
+                        html += `<div class="card-body" style="display: flex; padding: 0px;justify-content: space-between;">`;
+                        html += `<h5 class="card-title">${value.discount}</h5>`;
+                        html += `<div class="card-body-contain">`;
+                        html += `    <div class="btn-group dropup">`;
+                        html += `<button type="button" onclick="dropDown()" class="btn dropdown-toggle  promobtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-ellipsis-vertical"></i></button>`;
+                        html += `    <div class="dropdown-menu" id="drop_down_menu">`;
+                        html += `<a class="dropdown-item" href="#">Share link</a>`;
+                        html += `  <div class="dropdown-divider"></div>`;
+                        html += `   <a class="dropdown-item" href="#">Favourite</a>`;
+                        html += `    </div> `;
+                        html += ` </div> `;
+                        html +=
+                            `<a href="#" class="btn promo_contain_btn" data-follow="${value.type}" data-id="${value.id}"  onclick="Toggle(this)" >${value.type == 0 ? 'Following' : 'Not Following'}</a>`;
+                        html += `</div>`;
+                        html += `</div>`;
+                        html += `</div>`;
+                    });
+
+                    $('#main_div').append(html);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
